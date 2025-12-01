@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: crypto-alerter
+
+  # 1. Реактивное подключение (для работы приложения)
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/crypto_db
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+    pool:
+      initial-size: 5
+      max-size: 20
+
+  # 2. Блокирующее подключение (ТОЛЬКО для Liquibase)
+  datasource:
+    url: jdbc:postgresql://localhost:5432/crypto_db
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  # 3. Настройки самого Liquibase
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: true
+    contexts: default
+    # Чтобы явно создать DataSource для Liquibase
+    url: jdbc:postgresql://localhost:5432/crypto_db
+    user: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+    label-filter: default
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: crypto-alert-group
+      auto-offset-reset: latest # Читаем только новые сообщения
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+  telegram:
+    bot:
+      token: ${TELEGRAM_BOT_TOKEN}
+      api-url: "https://api.telegram.org/bot"
