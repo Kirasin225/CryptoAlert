@@ -1,7 +1,7 @@
 # 🚀 Crypto Alerter: High-Load Notification System
 
 ![Java](https://img.shields.io/badge/Java-21-orange)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-green)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.x-green)
 ![WebFlux](https://img.shields.io/badge/Architecture-Reactive-blue)
 ![Kafka](https://img.shields.io/badge/Apache-Kafka-black)
 ![Redis](https://img.shields.io/badge/Redis-Cache-red)
