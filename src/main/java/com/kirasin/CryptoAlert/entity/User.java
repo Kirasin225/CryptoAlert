@@ -15,4 +15,5 @@ public class User {
     private Long id;
     private Long chatId;
     private String username;
+    private Role role;
 }

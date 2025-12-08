@@ -33,6 +33,9 @@ dependencies {
     implementation("org.springframework.kafka:spring-kafka")
     implementation("org.apache.kafka:kafka-streams")
     implementation("io.projectreactor.kafka:reactor-kafka:1.3.25")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-r2dbc")
+    testImplementation("org.springframework.security:spring-security-test")
 
     // --- DATABASE & DRIVERS ---
     runtimeOnly("org.postgresql:r2dbc-postgresql")   // R2DBC драйвер
@@ -46,6 +49,10 @@ dependencies {
     // --- UTILS ---
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
+    implementation("io.jsonwebtoken:jjwt-api:0.13.0")
+
+    runtimeOnly  ("io.jsonwebtoken:jjwt-impl:0.13.0")
+    runtimeOnly  ("io.jsonwebtoken:jjwt-jackson:0.13.0")
 
     // --- TESTING ---
     testImplementation("org.springframework.boot:spring-boot-starter-test")

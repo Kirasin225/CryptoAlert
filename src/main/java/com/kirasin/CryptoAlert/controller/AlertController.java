@@ -14,13 +14,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class AlertController {
 
-    private final UserService userService;
     private final AlertService alertService;
-
-    @PostMapping("/users")
-    public Mono<User> registerUser(@RequestBody User user) {
-        return userService.registerUser(user);
-    }
 
     @PostMapping("/alerts")
     public Mono<Alert> createAlert(@RequestParam Long chatId, @RequestBody Alert alert) {

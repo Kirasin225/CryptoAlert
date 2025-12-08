@@ -1,6 +1,7 @@
 package com.kirasin.CryptoAlert.service.notification;
 
 import com.kirasin.CryptoAlert.dto.telegram.TelegramUpdate;
+import com.kirasin.CryptoAlert.entity.Role;
 import com.kirasin.CryptoAlert.entity.User;
 import com.kirasin.CryptoAlert.service.UserService;
 import jakarta.annotation.PostConstruct;
@@ -75,7 +76,7 @@ public class TelegramBotListener {
         if ("/start".equals(text)) {
             log.info("New user registration: {} ({})", username, chatId);
 
-            User newUser = new User(null, chatId, username);
+            User newUser = new User(null, chatId, username, Role.USER);
 
             userService.registerUser(newUser)
                     .flatMap(savedUser -> senderService.sendMessage(chatId, "Welcome! You are registered. \nWaiting for BTC alerts..."))
