@@ -12,7 +12,6 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 
-import static reactor.netty.http.HttpConnectionLiveness.log;
 
 @Service
 @RequiredArgsConstructor
@@ -51,14 +50,10 @@ public class AlertServiceImpl implements AlertService {
         String key = "alerts:" + alert.getSymbol();
 
         return redisTemplate.opsForList()
-                .remove(key, 1, alert)
-                .flatMap(removedCount -> {
-                    if (removedCount > 0) {
-                        log.info("Alert {} removed from Redis", alert.getId());
-                        return alertRepository.delete(alert);
-                    }
-                    return Mono.empty();
-                })
+                .range(key, 0, -1)
+                .filter(a -> a.getId().equals(alert.getId()))
+                .flatMap(a -> redisTemplate.opsForList().remove(key, 0, a))
+                .then(alertRepository.delete(alert))
                 .then();
     }
 }

@@ -1,16 +1,11 @@
 package com.kirasin.CryptoAlert.controller;
 
 import com.kirasin.CryptoAlert.dto.auth.LoginRequest;
-import com.kirasin.CryptoAlert.entity.User;
-import com.kirasin.CryptoAlert.repository.UserRepository;
 import com.kirasin.CryptoAlert.security.JwtUtil;
-import com.kirasin.CryptoAlert.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

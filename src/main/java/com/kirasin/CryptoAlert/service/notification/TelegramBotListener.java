@@ -7,6 +7,7 @@ import com.kirasin.CryptoAlert.service.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -22,6 +23,7 @@ public class TelegramBotListener {
     private final String botToken;
     private final UserService userService;
     private final TelegramService senderService;
+    private final PasswordEncoder passwordEncoder;
 
     private long lastUpdateId = 0;
 
@@ -29,7 +31,8 @@ public class TelegramBotListener {
                                @Value("${spring.telegram.bot.api-url}") String apiUrl,
                                @Value("${spring.telegram.bot.token}") String token,
                                UserService userService,
-                               TelegramService senderService) {
+                               TelegramService senderService, PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
         this.webClient = webClientBuilder.baseUrl(apiUrl).build();
         this.botToken = token;
         this.userService = userService;
@@ -76,11 +79,22 @@ public class TelegramBotListener {
         if ("/start".equals(text)) {
             log.info("New user registration: {} ({})", username, chatId);
 
-            User newUser = new User(null, chatId, username, Role.USER);
+            User newUser = User.builder().chatId(chatId)
+                            .username(username)
+                            .role(Role.ROLE_USER)
+                            .password(passwordEncoder.encode(chatId.toString()))
+                            .build();
 
             userService.registerUser(newUser)
                     .flatMap(savedUser -> senderService.sendMessage(chatId, "Welcome! You are registered. \nWaiting for BTC alerts..."))
-                    .onErrorResume(e -> senderService.sendMessage(chatId, "You are already registered!"))
+                    .onErrorResume(e -> {
+                        if (e.getMessage() != null && e.getMessage().contains("already registered")) {
+                            return senderService.sendMessage(chatId, "You are already registered!");
+                        }
+
+                        log.error(e.getMessage());
+                        return senderService.sendMessage(chatId, "System error. Try again later.");
+                    })
                     .subscribe();
         }
     }

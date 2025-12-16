@@ -23,7 +23,7 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getChatId().toString(); // Хэш пароля из БД
+        return user.getPassword(); // Хэш пароля из БД
     }
 
     @Override
@@ -31,7 +31,6 @@ public class MyUserDetails implements UserDetails {
         return user.getUsername(); // Или логин
     }
 
-    // Остальные методы (isAccountNonExpired и т.д.) можно вернуть true, если не используешь баны
     @Override public boolean isAccountNonExpired() { return true; }
     @Override public boolean isAccountNonLocked() { return true; }
     @Override public boolean isCredentialsNonExpired() { return true; }

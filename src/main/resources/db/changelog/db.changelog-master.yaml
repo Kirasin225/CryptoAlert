@@ -3,3 +3,7 @@ databaseChangeLog:
       file: db/changelog/changeset/001-initial-schema.sql
   - include:
       file: db/changelog/changeset/002-add-role-column.sql
+  - include:
+      file: db/changelog/changeset/003-add-password-column.sql
+  - include:
+      file: db/changelog/changeset/004-add-chat-id-constraint.sql

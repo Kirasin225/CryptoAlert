@@ -6,4 +6,5 @@ ALTER TABLE users
 
 --changeset kirasin:add-role-check-constraint
 ALTER TABLE users
+    DROP CONSTRAINT IF EXISTS chk_user_role,
     ADD CONSTRAINT chk_user_role CHECK (role IN ('ROLE_USER', 'ROLE_ADMIN'));
